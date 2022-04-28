@@ -1,0 +1,29 @@
+@import url(./global.css);
+@import url(./grid.css);
+
+#grid-container {
+  position: relative;
+  width: 900px;
+  height: 700px;
+}
+
+.row,
+.col {
+  display: flex;
+}
+
+.col {
+  flex-direction: column;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+#layers [aria-selected="true"] {
+  background-color: bisque;
+}
+
+.tile[aria-selected="true"] {
+  box-shadow: inset 0 0 5px blue;
+}

@@ -1,19 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ThemeProvider } from "styled-components";
+import Modal from "react-modal";
 import { Provider as ReduxProvider } from "react-redux";
 import { App } from "ui/App";
 import { store } from "state";
-import theme, { GlobalStyle } from "./theme";
+import { GlobalStyle, AppTheme } from "./theme";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const rootEl = document.getElementById("root");
+Modal.setAppElement(rootEl);
+
+const root = ReactDOM.createRoot(rootEl);
 root.render(
   <React.StrictMode>
     <ReduxProvider store={store}>
-      <ThemeProvider theme={theme}>
+      <AppTheme>
         <GlobalStyle />
         <App />
-      </ThemeProvider>
+      </AppTheme>
     </ReduxProvider>
   </React.StrictMode>
 );

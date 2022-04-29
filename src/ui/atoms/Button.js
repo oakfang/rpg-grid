@@ -1,14 +1,8 @@
 import styled from "styled-components";
-import { primaryWidget, neutralWidget, ctaWidget, sizes } from "ui/common";
-
-const variants = {
-  primary: primaryWidget,
-  neutral: neutralWidget,
-  cta: ctaWidget,
-};
+import { mix, sizes, widget } from "ui/common";
 
 export const Button = styled.button`
-  ${(props) => variants[props.$variant]};
+  ${(props) => widget(props.$variant)};
   padding: ${(props) => sizes[props.$size]};
   border: none;
   cursor: pointer;
@@ -35,8 +29,17 @@ Button.defaultProps = {
 };
 
 export const IconButton = styled(Button)`
-  border: var(--use-border);
+  ${mix.stroke};
   border-radius: 50%;
+  padding: 0;
+  font-size: calc(2 * ${(props) => sizes[props.$size]});
+  --size: calc(3 * ${(props) =>  sizes[props.$size]});
+  min-height: var(--size);
+  max-height: var(--size);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: rotate(${(props) => props.$rotation || 0}deg);
 
   &:active {
@@ -44,6 +47,7 @@ export const IconButton = styled(Button)`
   }
 
   &::after {
-    content: "${(props) => String.fromCharCode(props.$icon)}";
+    content: "${(props) => String.fromCodePoint(props.$icon)}";
+    line-height: 1em;
   }
 `;

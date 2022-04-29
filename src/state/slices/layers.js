@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-const getUniqueId = () => crypto.randomUUID();
+import { getUniqueId } from "utils";
+import { addAsset } from "./assets";
 
 function createLayerObject(name) {
   return {
     id: getUniqueId(),
     name,
+    assets: [],
   };
 }
+
 const bgLayer = createLayerObject("Layer 1");
 
 const initialState = {
@@ -30,8 +32,24 @@ const layersSlice = createSlice({
     setLayerName: (state, { payload: { id, name } }) => {
       state.layersStore[id].name = name;
     },
+    selectLayer: (state, { payload: id }) => {
+      state.activeLayer = id;
+    },
+    deleteLayer: (state, { payload: id }) => {
+      delete state.layersStore[id];
+      state.layersOrder = state.layersOrder.filter((layerId) => layerId !== id);
+      if (state.activeLayer === id) {
+        state.activeLayer = state.layersOrder[0];
+      }
+    },
+  },
+  extraReducers: {
+    [addAsset]: (state, { payload: { id, layerId } }) => {
+      state.layersStore[layerId].assets.push(id);
+    },
   },
 });
 
-export const { addLayer, setLayerName } = layersSlice.actions;
+export const { addLayer, setLayerName, selectLayer, deleteLayer } =
+  layersSlice.actions;
 export default layersSlice.reducer;

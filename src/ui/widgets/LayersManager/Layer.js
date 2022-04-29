@@ -1,46 +1,64 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
-import { setLayerName } from "state/actions";
+import { useState, useEffect, useCallback } from "react";
+import { useLayer } from "services/layers";
 import styled from "styled-components";
 import { IconButton } from "ui/atoms/Button";
-import { PENCIL } from "ui/atoms/icons";
-import { primaryWidget, sizes, ctaWidget } from "ui/common";
+import { SelfClosingInput } from "ui/atoms/SelfClosingInput";
+import { PENCIL, CLOSE, TRASH } from "ui/atoms/icons";
+import { widget, sizes } from "ui/common";
 
-export function Layer({ layer }) {
+export function Layer({ layer, onDeleteLayer }) {
+  const { isActive, setLayerName, selectLayer } = useLayer(layer.id);
   const [name, setName] = useState(layer.name);
   const [isEditing, setIsEditing] = useState(false);
-  const dispatch = useDispatch();
+  const close = useCallback(() => setIsEditing(false), []);
+
   useEffect(() => {
     if (!isEditing) {
       setName(layer.name);
     }
   }, [isEditing, layer]);
   const submit = () => {
-    dispatch(setLayerName({ name, id: layer.id }));
-    setIsEditing(false);
+    if (name) {
+      setLayerName(name);
+    }
+    close();
   };
 
   return (
-    <LayerDetails>
-      <summary>
+    <LayerDetails $active={isActive}>
+      <summary onClick={selectLayer} onKeyUp={(e) => e.preventDefault()}>
         <LayerName>
           <LayerNameController
             name={name}
             setName={setName}
             isEditing={isEditing}
-            setIsEditing={setIsEditing}
             submit={submit}
+            close={close}
           />
-          <IconButton
-            $icon={PENCIL}
-            $rotation={45}
-            $variant="cta"
-            $size="xs"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsEditing(true);
-            }}
-          />
+          <LayerActions>
+            <IconButton
+              title="Edit layer name"
+              $icon={isEditing ? CLOSE : PENCIL}
+              $rotation={isEditing ? 0 : 45}
+              $variant="cta"
+              $size="md"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(!isEditing);
+              }}
+            />
+            <IconButton
+              title="Delete layer"
+              $icon={TRASH}
+              $variant="cta"
+              $size="md"
+              disabled={!onDeleteLayer}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteLayer(layer);
+              }}
+            />
+          </LayerActions>
         </LayerName>
       </summary>
       <AssetsContainer>No assets yet!</AssetsContainer>
@@ -48,18 +66,11 @@ export function Layer({ layer }) {
   );
 }
 
-function LayerNameController({
-  name,
-  setName,
-  isEditing,
-  setIsEditing,
-  submit,
-}) {
-  const close = useCallback(() => setIsEditing(false), [setIsEditing]);
-
+function LayerNameController({ name, setName, isEditing, submit, close }) {
   if (!isEditing) {
     return <span>{name}</span>;
   }
+
   return (
     <SelfClosingInput
       value={name}
@@ -70,41 +81,10 @@ function LayerNameController({
   );
 }
 
-function SelfClosingInput({ value, setValue, close, submit }) {
-  const inputRef = useRef(null);
-  useEffect(() => {
-    const onKeyDown = (e) => {
-      if (e.key === "Escape" || e.key === "Esc") {
-        close();
-      }
-    };
-
-    const input = inputRef.current;
-    input.focus();
-    input.select();
-    input?.addEventListener("keydown", onKeyDown);
-    return () => {
-      input?.removeEventListener("keydown", onKeyDown);
-    };
-  }, [close]);
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    submit(value);
-  };
-
-  return (
-    <form onSubmit={onSubmit}>
-      <input
-        ref={inputRef}
-        type="text"
-        value={value}
-        onBlur={close}
-        onChange={(e) => setValue(e.target.value)}
-      />
-    </form>
-  );
-}
+const LayerActions = styled.div`
+  display: flex;
+  gap: ${sizes.sm};
+`;
 
 const LayerName = styled.div`
   display: flex;
@@ -114,14 +94,15 @@ const LayerName = styled.div`
 `;
 
 const AssetsContainer = styled.div`
-  ${primaryWidget}
+  ${widget("primary")}
   border-radius: ${sizes.xs};
   padding: ${sizes.sm};
   margin-block: ${sizes.sm};
 `;
 
 const LayerDetails = styled.details`
-  ${ctaWidget}
+  ${widget("cta")}
+  opacity: ${({ $active }) => ($active ? 1 : 0.5)};
   border-radius: ${sizes.xs};
   padding: ${sizes.md};
 

@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { primaryWidget, neutralWidget, sizes } from "ui/common";
+import { sizes, widget } from "ui/common";
 import { Button } from "ui/atoms/Button";
 import { LayersManager } from "ui/widgets/LayersManager";
+import { GridManager } from "ui/widgets/GridManager";
 
 export function App() {
   return (
@@ -14,17 +15,14 @@ export function App() {
         <LayersManager />
       </Sidebar>
       <Content>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-          euismod, urna eu tincidunt consectetur,
-        </p>
+        <GridManager />
       </Content>
     </Layout>
   );
 }
 
 const Header = styled.header`
-  ${primaryWidget}
+  ${widget("primary")}
   grid-area: header;
   display: flex;
   align-items: center;
@@ -33,12 +31,15 @@ const Header = styled.header`
 `;
 
 const Content = styled.main`
-  ${neutralWidget}
+  ${widget("neutral")}
   grid-area: canvas;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Sidebar = styled.aside`
-  ${neutralWidget}
+  ${widget("neutral")}
   grid-area: sidebar;
   padding: ${sizes.sm};
 `;

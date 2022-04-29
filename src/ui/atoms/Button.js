@@ -33,3 +33,17 @@ Button.defaultProps = {
   $variant: "primary",
   $size: "md",
 };
+
+export const IconButton = styled(Button)`
+  border: var(--use-border);
+  border-radius: 50%;
+  transform: rotate(${(props) => props.$rotation || 0}deg);
+
+  &:active {
+    transform: rotate(${(props) => props.$rotation || 0}deg) scale(0.9);
+  }
+
+  &::after {
+    content: "${(props) => String.fromCharCode(props.$icon)}";
+  }
+`;

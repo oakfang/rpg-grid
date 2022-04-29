@@ -27,18 +27,18 @@ const theme = {
   palette: {
     primary: {
       fill: "#E0D8B0",
-      text: "#000000",
-      stroke: "none",
+      text: "#74500f",
+      stroke: "1px solid currentColor",
     },
     neutral: {
       fill: "#FCFFE7",
       text: "#000000",
-      stroke: "none",
+      stroke: "1px solid currentColor",
     },
     cta: {
       fill: "#DEA057",
       text: "#ffffff",
-      stroke: "none",
+      stroke: "1px solid currentColor",
     },
   },
   size: {

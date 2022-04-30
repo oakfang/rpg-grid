@@ -66,6 +66,7 @@ const baseModalStyle = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 1000,
   },
   content: {
     position: "static",

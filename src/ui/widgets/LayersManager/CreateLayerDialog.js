@@ -1,23 +1,20 @@
-import { useEffect, useState } from "react";
-import Modal from "react-modal";
+import { useState } from "react";
 import styled from "styled-components";
-import { createModalStyles, widget, sizes } from "ui/common";
+import { useModalService } from "services/modal";
+import { widget, sizes } from "ui/common";
 import { Button } from "ui/atoms/Button";
 import { SelfClosingInput } from "ui/atoms/SelfClosingInput";
 
-const INITIAL_LAYER_NAME = "New Layer name";
+export const label = "Create new layer";
 
-const modalStyles = createModalStyles((styles) => {
+export const styles = (styles) => {
   styles.content.width = "350px";
-});
+};
 
-export function CreateLayerDialog({ show, close, addLayer }) {
-  const [name, setName] = useState(INITIAL_LAYER_NAME);
-  useEffect(() => {
-    if (!show) {
-      setName(INITIAL_LAYER_NAME);
-    }
-  }, [show]);
+export function CreateLayerDialog({ addLayer }) {
+  const { close } = useModalService();
+  const [name, setName] = useState("New Layer name");
+
   const submit = () => {
     if (!name) return;
     addLayer(name);
@@ -25,12 +22,7 @@ export function CreateLayerDialog({ show, close, addLayer }) {
   };
 
   return (
-    <Modal
-      isOpen={show}
-      onRequestClose={close}
-      contentLabel="Create new layer"
-      style={modalStyles}
-    >
+    <>
       <Header>
         <h2>Create new Layer</h2>
       </Header>
@@ -45,7 +37,7 @@ export function CreateLayerDialog({ show, close, addLayer }) {
           </Button>
         </Actions>
       </Container>
-    </Modal>
+    </>
   );
 }
 

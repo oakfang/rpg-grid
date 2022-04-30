@@ -1,18 +1,25 @@
-import { useState } from "react";
+import { useModalService } from "services/modal";
 import { Button } from "ui/atoms/Button";
-import { CreateGridDialog } from "./CreateGridDialog";
+import * as createGridDialog from "./CreateGridDialog";
 
 export function Toolbar() {
-  const [creatingGrid, setCreatingGrid] = useState(false);
-  const close = () => setCreatingGrid(false);
+  const { open } = useModalService();
 
   return (
     <>
       <h1>RPG Grid</h1>
-      <Button $variant="cta" onClick={() => setCreatingGrid(true)}>
+      <Button
+        $variant="cta"
+        onClick={() =>
+          open({
+            label: createGridDialog.label,
+            content: <createGridDialog.CreateGridDialog />,
+            styleProducer: createGridDialog.styles,
+          })
+        }
+      >
         New Grid
       </Button>
-      <CreateGridDialog show={creatingGrid} close={close} />
     </>
   );
 }

@@ -1,34 +1,43 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { sizes, widget } from "ui/common";
 import { useLayersService } from "services/layers";
+import { useModalService } from "services/modal";
 import { IconButton } from "ui/atoms/Button";
 import { ADD } from "ui/atoms/icons";
-import { CreateLayerDialog } from "./CreateLayerDialog";
-import { DeleteLayerDialog } from "./DeleteLayerDialog";
+import * as createLayerDialog from "./CreateLayerDialog";
+import * as deleteLayerDialog from "./DeleteLayerDialog";
 import { Layer } from "./Layer";
 
 export function LayersManager() {
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [toBeDeletedLayer, setToBeDeletedLayer] = useState(null);
   const { layers, addLayer, deleteLayer } = useLayersService();
+  const { open } = useModalService();
+
+  const setToBeDeletedLayer = (layer) => {
+    open({
+      label: deleteLayerDialog.label,
+      content: (
+        <deleteLayerDialog.DeleteLayerDialog
+          deleteLayer={deleteLayer}
+          layer={layer}
+        />
+      ),
+    });
+  };
 
   return (
     <WidgetContainer>
-      <CreateLayerDialog
-        addLayer={addLayer}
-        show={showCreateModal}
-        close={() => setShowCreateModal(false)}
-      />
-      <DeleteLayerDialog
-        deleteLayer={deleteLayer}
-        layer={toBeDeletedLayer}
-        cancel={() => setToBeDeletedLayer(null)}
-      />
       <Toolbar>
         <h3>Grid Layers</h3>
         <IconButton
-          onClick={() => setShowCreateModal(true)}
+          onClick={() =>
+            open({
+              label: createLayerDialog.label,
+              content: (
+                <createLayerDialog.CreateLayerDialog addLayer={addLayer} />
+              ),
+              styleProducer: createLayerDialog.styles,
+            })
+          }
           title="Add new layer"
           $icon={ADD}
           $variant="cta"

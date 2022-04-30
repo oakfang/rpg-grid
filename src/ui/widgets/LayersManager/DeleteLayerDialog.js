@@ -1,30 +1,26 @@
-import Modal from "react-modal";
 import styled from "styled-components";
-import { createModalStyles, widget, sizes } from "ui/common";
+import { widget, sizes } from "ui/common";
 import { Button } from "ui/atoms/Button";
+import { useModalService } from "services/modal";
 
-const modalStyles = createModalStyles();
+export const label = "Delete layer";
 
-export function DeleteLayerDialog({ layer, cancel, deleteLayer }) {
+export function DeleteLayerDialog({ layer, deleteLayer }) {
+  const { close } = useModalService();
   const submit = () => {
     deleteLayer(layer.id);
-    cancel();
+    close();
   };
 
   return (
-    <Modal
-      isOpen={!!layer}
-      onRequestClose={cancel}
-      contentLabel="Delete layer"
-      style={modalStyles}
-    >
+    <>
       <Header>
         <h2>Delete layer</h2>
       </Header>
       <Container>
         <Text>Delete layer "{layer?.name}"?</Text>
         <Actions>
-          <Button $variant="primary" onClick={cancel}>
+          <Button $variant="primary" onClick={close}>
             Cancel
           </Button>
           <Button $variant="cta" onClick={submit}>
@@ -32,7 +28,7 @@ export function DeleteLayerDialog({ layer, cancel, deleteLayer }) {
           </Button>
         </Actions>
       </Container>
-    </Modal>
+    </>
   );
 }
 

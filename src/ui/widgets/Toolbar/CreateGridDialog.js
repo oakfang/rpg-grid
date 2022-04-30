@@ -1,29 +1,19 @@
 import { useState } from "react";
-import Modal from "react-modal";
 import styled from "styled-components";
 import { useGridService } from "services/grid";
-import { createModalStyles, widget, sizes } from "ui/common";
+import { useModalService } from "services/modal";
+import { widget, sizes } from "ui/common";
 import { Button } from "ui/atoms/Button";
 import { Slider } from "ui/atoms/Slider";
 
-const modalStyles = createModalStyles((styles) => {
+export const styles = (styles) => {
   styles.content.width = "400px";
-});
+};
 
-export function CreateGridDialog({ show, close }) {
-  return (
-    <Modal
-      isOpen={show}
-      onRequestClose={close}
-      contentLabel="Create new grid"
-      style={modalStyles}
-    >
-      <InnerDialog close={close} />
-    </Modal>
-  );
-}
+export const label = "Create new grid"
 
-function InnerDialog({ close }) {
+export function CreateGridDialog() {
+  const { close } = useModalService()
   const { grid, createGrid } = useGridService();
   const [height, setHeight] = useState(grid.height);
   const [width, setWidth] = useState(grid.width);

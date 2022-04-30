@@ -1,24 +1,19 @@
 import { useLayersService } from "services/layers";
 import styled, { css } from "styled-components";
-import { mix } from "ui/common";
+import { mix, widget } from "ui/common";
+import { useGridService } from "services/grid";
 import { gridHelperEnabled } from "./guidelines";
 
-function useGridService() {
-  return {
-    height: 500,
-    width: 500,
-    coulmnCount: 10,
-  };
-}
-
 export function GridManager() {
-  const { height, width, coulmnCount } = useGridService();
+  const {
+    grid: { height, width, columnCount },
+  } = useGridService();
   const { layers } = useLayersService();
 
   return (
-    <GridContainer $height={height} $width={width} $coulmnCount={coulmnCount}>
+    <GridContainer $height={height} $width={width} $columnCount={columnCount}>
       {layers.map((layer, idx) => (
-        <GridMap $index={idx}>
+        <GridMap key={layer.id} $index={idx}>
           <Asset $x={4} $y={5} $width={2} $height={1} $bg="red" />
         </GridMap>
       ))}
@@ -61,16 +56,19 @@ const GridMap = styled.div`
 const gridGuidelines = css`
   background-image: paint(dot-grid);
   --dot-size: 2px;
-  --dot-spacing: ${(props) => props.$width / props.$coulmnCount - 2}px;
-  --dot-color: white;
+  --dot-spacing: ${(props) => props.$width / props.$columnCount - 2}px;
+  --dot-color: var(--text);
 `;
 
 const GridContainer = styled.div`
+  ${widget("neutral")};
   ${mix.stroke}
   position: relative;
   height: ${(props) => props.$height}px;
   width: ${(props) => props.$width}px;
-  --column-count: ${(props) => props.$coulmnCount};
-  --column-width: ${(props) => props.$width / props.$coulmnCount}px;
+  min-height: ${(props) => props.$height}px;
+  min-width: ${(props) => props.$width}px;
+  --column-count: ${(props) => props.$columnCount};
+  --column-width: ${(props) => props.$width / props.$columnCount}px;
   ${gridHelperEnabled && gridGuidelines}
 `;

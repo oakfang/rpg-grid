@@ -1,15 +1,14 @@
 import styled from "styled-components";
-import { sizes, widget } from "ui/common";
-import { Button } from "ui/atoms/Button";
+import { sizes, widget, scroller } from "ui/common";
 import { LayersManager } from "ui/widgets/LayersManager";
 import { GridManager } from "ui/widgets/GridManager";
+import { Toolbar } from "ui/widgets/Toolbar";
 
 export function App() {
   return (
     <Layout>
       <Header>
-        <h1>RPG Grid</h1>
-        <Button $variant="cta">New Grid</Button>
+        <Toolbar />
       </Header>
       <Sidebar>
         <LayersManager />
@@ -32,10 +31,13 @@ const Header = styled.header`
 
 const Content = styled.main`
   ${widget("neutral")}
+  padding: ${sizes.xxl};
   grid-area: canvas;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  overflow: auto;
+  ${scroller}
 `;
 
 const Sidebar = styled.aside`

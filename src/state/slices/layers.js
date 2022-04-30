@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUniqueId } from "utils";
+import { getUniqueId } from "state/utils";
 import { addAsset } from "./assets";
+import { createGrid } from "./grid";
 
 function createLayerObject(name) {
   return {
@@ -47,6 +48,7 @@ const layersSlice = createSlice({
     [addAsset]: (state, { payload: { id, layerId } }) => {
       state.layersStore[layerId].assets.push(id);
     },
+    [createGrid]: () => initialState,
   },
 });
 

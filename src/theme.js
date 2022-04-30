@@ -37,17 +37,17 @@ const lightTheme = {
     primary: {
       fill: "#E0D8B0",
       text: "#74500f",
-      stroke: "1px solid currentColor",
+      stroke: "transparent",
     },
     neutral: {
       fill: "#FCFFE7",
       text: "#000000",
-      stroke: "1px solid currentColor",
+      stroke: "var(--text)",
     },
     cta: {
       fill: "#DEA057",
       text: "#ffffff",
-      stroke: "1px solid currentColor",
+      stroke: "var(--text)",
     },
   },
   modal: {

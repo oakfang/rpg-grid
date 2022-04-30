@@ -21,7 +21,7 @@ export const mix = {
     color: var(--text);
   `,
   stroke: css`
-    border: var(--stroke);
+    box-shadow: inset 0 0 1px 1px var(--stroke);
   `,
 };
 
@@ -29,11 +29,10 @@ export const mix = {
  * @param {'primary'|'neutral'|'cta'} paletteName
  */
 export const widget = memoize(
-  (paletteName, { useStroke } = {}) => css`
+  (paletteName) => css`
     ${palette(paletteName)}
     ${mix.fill}
-  ${mix.text}
-  ${useStroke ? mix.stroke : ""}
+    ${mix.text}
   `
 );
 
@@ -79,3 +78,18 @@ const baseModalStyle = {
 
 export const createModalStyles = (changer = identity) =>
   produce(baseModalStyle, changer);
+
+export const scroller = css`
+  &::-webkit-scrollbar {
+    width: ${sizes.md};
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    ${widget("cta")}
+    border-radius: ${sizes.xs};
+  }
+`;

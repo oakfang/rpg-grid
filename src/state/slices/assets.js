@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUniqueId } from "utils";
+import { getUniqueId } from "state/utils";
+import { createGrid } from "./grid";
 
 function createAssetObject(props) {
   return {
@@ -20,6 +21,9 @@ const assetsSlice = createSlice({
       const asset = createAssetObject(props);
       state.assetsStore[asset.id] = asset;
     },
+  },
+  extraReducers: {
+    [createGrid]: () => initialState,
   },
 });
 

@@ -15,7 +15,7 @@ export function DeleteLayerDialog({ layer, cancel, deleteLayer }) {
     <Modal
       isOpen={!!layer}
       onRequestClose={cancel}
-      contentLabel="Create new layer"
+      contentLabel="Delete layer"
       style={modalStyles}
     >
       <Header>

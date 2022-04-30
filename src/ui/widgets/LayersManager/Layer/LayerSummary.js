@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { IconButton } from "ui/atoms/Button";
 import { SelfClosingInput } from "ui/atoms/SelfClosingInput";
 import { PENCIL, CLOSE, TRASH } from "ui/atoms/icons";
-import { sizes } from "ui/common";
+import { mix, sizes } from "ui/common";
 
 export function LayerSummary({
   layer,
@@ -16,13 +16,16 @@ export function LayerSummary({
 }) {
   return (
     <LayerName>
-      <LayerNameController
-        name={name}
-        setName={setName}
-        isEditing={isEditing}
-        submit={submit}
-        close={close}
-      />
+      <Row>
+        <ColorIndicator $background={layer.background} />
+        <LayerNameController
+          name={name}
+          setName={setName}
+          isEditing={isEditing}
+          submit={submit}
+          close={close}
+        />
+      </Row>
       <LayerActions>
         <IconButton
           title="Edit layer name"
@@ -65,6 +68,21 @@ function LayerNameController({ name, setName, isEditing, submit, close }) {
     />
   );
 }
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${sizes.md};
+`;
+
+const ColorIndicator = styled.div`
+  ${mix.stroke}
+  width: ${sizes.xl};
+  height: ${sizes.xl};
+  border-radius: 50%;
+  background-color: ${({ $background }) => $background};
+`;
 
 const LayerActions = styled.div`
   display: flex;

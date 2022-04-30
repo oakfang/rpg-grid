@@ -3,15 +3,16 @@ import { getUniqueId } from "state/utils";
 import { addAsset } from "./assets";
 import { createGrid } from "./grid";
 
-function createLayerObject(name) {
+function createLayerObject(name, background = "transparent") {
   return {
     id: getUniqueId(),
     name,
+    background,
     assets: [],
   };
 }
 
-const bgLayer = createLayerObject("Layer 1");
+const bgLayer = createLayerObject("Background");
 
 const initialState = {
   layersStore: {
@@ -25,10 +26,11 @@ const layersSlice = createSlice({
   name: "layers",
   initialState,
   reducers: {
-    addLayer: (state, { payload: name }) => {
-      const layer = createLayerObject(name);
+    addLayer: (state, { payload: { name, background } }) => {
+      const layer = createLayerObject(name, background);
       state.layersStore[layer.id] = layer;
       state.layersOrder.push(layer.id);
+      state.activeLayer = layer.id;
     },
     setLayerName: (state, { payload: { id, name } }) => {
       state.layersStore[id].name = name;

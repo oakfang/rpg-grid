@@ -1,7 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { SketchPicker } from "react-color";
 import { useModalService } from "services/modal";
-import { widget, sizes } from "ui/common";
+import { widget, sizes, toRGBAString } from "ui/common";
 import { Button } from "ui/atoms/Button";
 import { SelfClosingInput } from "ui/atoms/SelfClosingInput";
 
@@ -12,12 +13,16 @@ export const styles = (styles) => {
 };
 
 export function CreateLayerDialog({ addLayer }) {
+  const [showColor, setShowColor] = useState(false);
   const { close } = useModalService();
+  const [background, setBackground] = useState({
+    rgb: { r: 255, g: 255, b: 255, a: 1 },
+  });
   const [name, setName] = useState("New Layer name");
 
   const submit = () => {
     if (!name) return;
-    addLayer(name);
+    addLayer({ name, background: toRGBAString(background.rgb) });
     close();
   };
 
@@ -27,7 +32,19 @@ export function CreateLayerDialog({ addLayer }) {
         <h2>Create new Layer</h2>
       </Header>
       <Container>
-        <Input value={name} setValue={setName} submit={submit} />
+        <Row>
+          <ColorIndicator
+            $background={background}
+            onClick={() => setShowColor(!showColor)}
+          />
+          <Input value={name} setValue={setName} submit={submit} />
+        </Row>
+        {showColor && (
+          <SketchPicker
+            color={background}
+            onChange={(color) => setBackground(color)}
+          />
+        )}
         <Actions>
           <Button $variant="primary" onClick={close}>
             Cancel
@@ -40,6 +57,21 @@ export function CreateLayerDialog({ addLayer }) {
     </>
   );
 }
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${sizes.md};
+`;
+
+const ColorIndicator = styled.div`
+  cursor: pointer;
+  width: ${sizes.xxl};
+  height: ${sizes.xxl};
+  border-radius: 50%;
+  background-color: ${({ $background: { rgb } }) => toRGBAString(rgb)};
+`;
 
 const Input = styled(SelfClosingInput)`
   margin-block: ${sizes.xl};

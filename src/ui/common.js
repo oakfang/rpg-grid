@@ -94,3 +94,6 @@ export const scroller = css`
     border-radius: ${sizes.xs};
   }
 `;
+
+export const toRGBAString = ({ r, g, b, a = 1 }) =>
+  `rgba(${r}, ${g}, ${b}, ${a})`;

@@ -1,8 +1,13 @@
-export let gridHelperEnabled = false;
+export let gridGuideLines = null;
 
 if (window?.CSS?.paintWorklet?.addModule) {
   CSS.paintWorklet.addModule(
     "https://unpkg.com/houdini-paint-dot-grid/dist/dot-grid-worklet.js"
   );
-  gridHelperEnabled = true;
+  gridGuideLines = {
+    id: "grid-guidelines",
+    name: "Grid Guidelines",
+    assets: [],
+    background: "paint(dot-grid)",
+  };
 }
